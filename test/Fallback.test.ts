@@ -19,29 +19,16 @@ describe("Fallback", function () {
     sendToFallback = await SendToFallback.deploy();
   })
 
-  it("test_transferToFallback_noCallData", async function () {
+  it("test_transferToFallback", async function () {
     const tx = await sendToFallback.transferToFallback(fallback.address, {value: "10"});
     expect(await fallback.getBalance()).to.be.equal(10);
 
     await expect(tx).to.emit(fallback, "Log").withArgs("receive", 2240);
   });
 
-  it("test_transferToFallback_withCallData", async function () {
-    const tx = await sendToFallback.transferToFallback(fallback.address, {value: "10", data: 0x0});
-    expect(await fallback.getBalance()).to.be.equal(10);
-
-    await expect(tx).to.emit(fallback, "Log").withArgs("fallback", 2240);
-  });
-
-  it("test_callFallback_noCallData", async function () {
+  it("test_callFallback", async function () {
     const tx = await sendToFallback.callFallback(fallback.address, {value: "10"});
     expect(await fallback.getBalance()).to.be.equal(20);
-    await expect(tx).to.emit(fallback, "Log").withArgs("receive", 28538300);
-  });
-
-  it("test_callFallback_noCallData", async function () {
-    const tx = await sendToFallback.callFallback(fallback.address, {value: "10", data: 0x0});
-    expect(await fallback.getBalance()).to.be.equal(20);
-    await expect(tx).to.emit(fallback, "Log").withArgs("fallback", 28538300);
+    await expect(tx).to.emit(fallback, "Log").withArgs("fallback", 28538249);
   });
 });

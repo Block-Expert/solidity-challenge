@@ -28,7 +28,7 @@ contract SendToFallback {
   }
 
   function callFallback(address payable _to) public payable {
-    (bool sent, ) = _to.call{value: msg.value}("");
+    (bool sent, ) = _to.call{value: msg.value}("Test()");
     require(sent, "Failed to send Ether");
   }
 }
