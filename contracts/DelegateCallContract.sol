@@ -27,7 +27,7 @@ contract A {
     );
 
     // B's storage is set, A is not modified
-    (success, data) = _contract.call(
+    (success, data) = _contract.call{value: 10}(
       abi.encodeWithSignature("setVars(uint256)", _num * 5)
     );
   }
