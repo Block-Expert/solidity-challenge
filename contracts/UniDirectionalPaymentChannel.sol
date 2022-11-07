@@ -12,18 +12,18 @@ contract UniDirectionalPaymentChannel is ReentrancyGuard {
   address payable public receiver;
 
   uint256 private constant DURATION = 7 * 24 * 60 * 60;
-  uint256 public expireAt;
+  uint256 public expiresAt;
 
   constructor(address payable _receiver) payable {
     require(_receiver != address(0), "receiver = zero address");
     sender = payable(msg.sender);
     receiver = _receiver;
-    expireAt = block.timestamp + DURATION;
+    expiresAt = block.timestamp + DURATION;
   }
 
   function _getHash(uint256 _amount) private view returns (bytes32) {
     // NOTE: sign with address of this contract to protect agains
-    // replay attack on other contract
+    // replay attack on other contracts
     return keccak256(abi.encodePacked(address(this), _amount));
   }
 
@@ -58,7 +58,7 @@ contract UniDirectionalPaymentChannel is ReentrancyGuard {
 
   function cancel() external {
     require(msg.sender == sender, "!sender");
-    require(block.timestamp >= expireAt, "!expiry");
+    require(block.timestamp >= expiresAt, "!expired");
     selfdestruct(sender);
   }
 }
