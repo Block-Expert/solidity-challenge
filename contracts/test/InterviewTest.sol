@@ -5,7 +5,6 @@ import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
-import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 
 contract InterviewTest is ERC20Burnable, Ownable {
     using Address for address;
@@ -15,15 +14,15 @@ contract InterviewTest is ERC20Burnable, Ownable {
     uint256 public totalCollateral;
     uint256 public baseRate = 2 * 10**16;
 
-    IERC20 public constant dai =
+    IERC20 public dai =
         IERC20(0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512);
-    AggregatorV3Interface internal constant priceFeed =
-        AggregatorV3Interface(0x773616E4d11A78F511299002da57A0a94577F1f4);
 
     mapping(address => uint256) private usersCollateral;
     mapping(address => uint256) private usersBorrowed;
 
-    constructor() ERC20("Bond DAI", "bDAI") {}
+    constructor(address _tokenAddress) ERC20("Bond DAI", "bDAI") {
+        dai = IERC20(_tokenAddress);
+    }
 
     function bondAsset(uint256 _amount) public {
         totalDeposit += _amount;
@@ -114,9 +113,8 @@ contract InterviewTest is ERC20Burnable, Ownable {
         return amount * price;
     }
 
-    function _getLatestPrice() public view returns (int256) {
-        (, int256 price, , , ) = priceFeed.latestRoundData();
-        return price;
+    function _getLatestPrice() public pure returns (int256) {
+        return 10;
     }
 
     function getCollateral() external view returns (uint256) {
