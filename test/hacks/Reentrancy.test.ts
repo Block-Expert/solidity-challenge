@@ -3,11 +3,6 @@ import { expect } from "chai";
 import { Contract } from "ethers";
 import { ethers } from "hardhat";
 
-type MyStruct = {
-  name: string;
-  nums: number[];
-} 
-
 let owner: SignerWithAddress;
 let user1: SignerWithAddress;
 let user2: SignerWithAddress;
