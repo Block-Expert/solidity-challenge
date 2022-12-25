@@ -82,7 +82,7 @@ contract InterviewTestFixed is ERC20Burnable, Ownable {
 
         uint256 fee = (borrowAmount * baseRate) / 10**18;
         // Transfer dai and handle control to receiver
-        bytes memory data = borrower.functionCall(
+        bytes memory data = borrower.functionCallWithValue(
             abi.encodeWithSignature("onReceive(uint256)", fee),
             borrowAmount
         );
